@@ -17,4 +17,17 @@
 
 package com.example.android.marsrealestate.network
 
-class MarsProperty()
+import com.squareup.moshi.Json
+
+data class MarsProperty(
+        val id:String,
+        /**
+         *  We Use The "@Json" annotation when the name of the Json tag is different to the variable name
+         *  We want to assign in our data class
+         */
+        @Json(name = "img_src")
+        val imgSrcURL: String,
+        val type:String,
+        val price:Double
+
+)

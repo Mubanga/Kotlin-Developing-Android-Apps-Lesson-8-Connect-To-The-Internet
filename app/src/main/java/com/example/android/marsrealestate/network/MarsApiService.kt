@@ -17,4 +17,47 @@
 
 package com.example.android.marsrealestate.network
 
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
+import retrofit2.http.GET
+
 private const val BASE_URL = "https://mars.udacity.com/"
+
+private val moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
+/**
+ *  This Retrofit object will be responsible for taking our Web Service and generating understandable/parsed
+ *  objects for the rest of our
+ *
+ */
+
+private val retrofit = Retrofit.Builder()
+        .addConverterFactory(MoshiConverterFactory.create())
+        .baseUrl(BASE_URL)
+        .build()
+
+interface MarsApiService {
+    /**
+     *  Thanks To Moshi Retrofit Will Now Parse The Returned Json String From The Server And Construct/Build
+     *  Nice Kotlin Data class Objects For Us Hence....MarsProperty
+     */
+    @GET("realestate")
+    fun getProperties():
+            Call<List<MarsProperty>>
+}
+
+/**
+ *  The MarsApi is a public object so that the entire application has access to it. This will also
+ *  probably be a singleton because creating more than one instance of it is rather expensive and time consuming
+ */
+object MarsApi {
+    val retrofitService : MarsApiService by lazy {
+        retrofit.create(MarsApiService::class.java)
+    }
+}
